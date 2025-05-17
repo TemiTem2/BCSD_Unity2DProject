@@ -7,6 +7,7 @@ public class Bullet : MonoBehaviour
     public float bulletDamage;
     private Vector2 bullet_pos;
     private Bullet bullet;
+    public PlayerMove player;
 
     private void Start()
     {

@@ -7,53 +7,80 @@ public class PlayerMove : MonoBehaviour
     public GameObject bulletPrefab;
     public GameObject ChargedbulletPrefab;
     public Transform spawnpoint;
-    public bool Charge;
+    public float ChargeTimeRequired = 0.5f;
+    public float dir_now;
+
+    private float holdTimer = 0f;
+    private bool ChargedBullet = false;
 
     void Start()
     {
-         player_pos = new Vector2 (0,0);
-        
+        player_pos = new Vector2(0, 0);
+
     }
 
     private void FixedUpdate()
     {
         Player_Move();
        
+        
+
     }
 
     private void Update()
     {
-        if (Input.GetButtonUp("Jump"))
+        Player_Fire();
+        
+        if (dir_now != Input.GetAxisRaw("Horizontal") && Input.GetAxisRaw("Horizontal") != 0)//보는 방향 조절
         {
-            Player_Fire(Charge);
+            dir_now = Input.GetAxisRaw("Horizontal");
         }
     }
+
+
     public void Player_Move()
     {
         transform.Translate(player_pos);
         player_pos = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * bojung * Time.deltaTime;
+        if (Input.GetButtonDown("Vertical")&&Input.GetAxisRaw("Vertical")==1)
+        {
+            player_pos = new Vector2(Input.GetAxisRaw("Horizontal"), 5) * bojung * Time.deltaTime;
+        }
+
     }
 
     public void Player_Jump()
     {
-        player_pos = new Vector2(0,5)* bojung * Time.deltaTime;
+        player_pos = new Vector2(0, 5) * bojung * Time.deltaTime;
         transform.Translate(player_pos);
     }
 
-    public void Player_Fire(bool Ischarge)
+    public void Player_Fire()
     {
-        if (Ischarge)
+        if (Input.GetButton("Jump"))
         {
-            Instantiate(ChargedbulletPrefab, spawnpoint.position, Quaternion.identity);
-        }
-        else 
-        {
-            Instantiate(bulletPrefab, spawnpoint.position, Quaternion.identity);
-        }
-    }
+            holdTimer = holdTimer + Time.deltaTime;
 
-    //private void FIre()
-    //{
-    //    Instantiate(bulletPrefab, spawnpoint.position, Quaternion.identity);
-    //}
+            if (holdTimer >= ChargeTimeRequired)
+            {
+                ChargedBullet = true;
+
+            }
+            Debug.Log(holdTimer);
+        }
+        if (Input.GetButtonUp("Jump"))
+        {
+            if (ChargedBullet)
+            {
+                Instantiate(ChargedbulletPrefab, spawnpoint.position, Quaternion.identity);
+            }
+            else
+            {
+                Instantiate(bulletPrefab, spawnpoint.position, Quaternion.identity);
+            }
+            holdTimer = 0f;
+            ChargedBullet = false;
+        }
+
+    }
 }

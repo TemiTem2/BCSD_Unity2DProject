@@ -54,36 +54,21 @@ public class ChargeState : Istate
 {
     private PlayerController player;
     private PlayerMove playerMove;
-  
-    public float ChargeTimeRequired = 0.5f;
-
-    private float holdTimer = 0f;
-    private bool ChargedBullet = false;
+ 
     public void Enter(PlayerController player)
     {
-        playerMove = new PlayerMove();
     }
     public void Update(PlayerController player)
     {
         if (Input.GetButton("Jump"))
-        {
-            holdTimer = holdTimer + Time.deltaTime;
-
-            if (holdTimer >= ChargeTimeRequired)
-            {
-                ChargedBullet = true;
-            }
-        }
+        { }
+            
+        
         else
         {
-
-            holdTimer = 0f;
-            
             player.ChangeState(new IdleState());
         }
     }
     public void Exit(PlayerController player)
-    {
-        playerMove.Charge = ChargedBullet;
-        ChargedBullet = false; }
+    {}
 }

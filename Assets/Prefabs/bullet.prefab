@@ -140,3 +140,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletSpeed: 20
   bulletDamage: 0
+  player: {fileID: 3839403120441263561, guid: b09a5f58e4fbecd4e9f3f095c90e8238, type: 3}
