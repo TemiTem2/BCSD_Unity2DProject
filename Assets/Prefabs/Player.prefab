@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 747046190621819059}
   - component: {fileID: 3476131204681973203}
   - component: {fileID: 3839403120441263561}
-  - component: {fileID: 5709329258380638177}
+  - component: {fileID: 3575029722423651391}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -146,7 +146,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5699186190892403251}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -178,7 +178,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bojung: 0.25
---- !u!114 &5709329258380638177
+  bulletPrefab: {fileID: 7141307500127815474, guid: 2f531fcbbe90d2e468f59007c018eaf1, type: 3}
+  ChargedbulletPrefab: {fileID: 7141307500127815474, guid: e4709bba7eca1bb4db26a83a76873dfc, type: 3}
+  spawnpoint: {fileID: 7232322931184251175}
+--- !u!114 &3575029722423651391
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -187,11 +190,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5699186190892403251}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63e9fff9bd897f44d8a7f13721122d72, type: 3}
+  m_Script: {fileID: 11500000, guid: 2132919d979b6d144a8fb736e9d6dfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 7141307500127815474, guid: 2f531fcbbe90d2e468f59007c018eaf1, type: 3}
-  spawnpoint: {fileID: 7232322931184251175}
 --- !u!1 &7685353726752763762
 GameObject:
   m_ObjectHideFlags: 0
@@ -217,7 +218,7 @@ Transform:
   m_GameObject: {fileID: 7685353726752763762}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.4, y: 0, z: 0}
+  m_LocalPosition: {x: 0.6, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
