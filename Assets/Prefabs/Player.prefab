@@ -177,10 +177,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b41ac43e2b3ff34ea294d69a342aef0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bojung: 0.25
+  high_speed: 2
+  Jump_height: 5
   bulletPrefab: {fileID: 7141307500127815474, guid: 2f531fcbbe90d2e468f59007c018eaf1, type: 3}
   ChargedbulletPrefab: {fileID: 7141307500127815474, guid: e4709bba7eca1bb4db26a83a76873dfc, type: 3}
   spawnpoint: {fileID: 7232322931184251175}
+  ChargeTimeRequired: 0.5
+  dir_now: 0
+  bulletSpeed: 20
 --- !u!114 &3575029722423651391
 MonoBehaviour:
   m_ObjectHideFlags: 0

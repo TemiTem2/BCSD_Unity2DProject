@@ -2,61 +2,83 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    private Vector2 player_pos;
-    public float bojung;
+    private Rigidbody2D rigid;
+    private bool Is_Jumping;
+    public float high_speed = 2.0f;
+    public float Jump_height = 10.0f;
     public GameObject bulletPrefab;
     public GameObject ChargedbulletPrefab;
     public Transform spawnpoint;
     public float ChargeTimeRequired = 0.5f;
-    public float dir_now;
+    private float dir_now=1;
+    public float bulletSpeed;
 
     private float holdTimer = 0f;
     private bool ChargedBullet = false;
 
     void Start()
     {
-        player_pos = new Vector2(0, 0);
+        
+        rigid = GetComponent<Rigidbody2D>();
 
     }
 
     private void FixedUpdate()
     {
         Player_Move();
-       
-        
+        if (rigid.linearVelocityY < 0.0f)
+        {
+            Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0, 0));
+            RaycastHit2D hit = Physics2D.Raycast(rigid.position, Vector3.down, 1, LayerMask.GetMask("Flatform"));
+            if (hit.collider != null)
+            {
+                Debug.Log(hit.collider.name);
+                Is_Jumping = false;
+            }
 
+        }
     }
 
     private void Update()
     {
         Player_Fire();
-        
-        if (dir_now != Input.GetAxisRaw("Horizontal") && Input.GetAxisRaw("Horizontal") != 0)//보는 방향 조절
+        if (Input.GetButtonDown("Vertical")&&Is_Jumping==false)
         {
-            dir_now = Input.GetAxisRaw("Horizontal");
+            rigid.AddForce(Vector2.up * Jump_height, ForceMode2D.Impulse);
+            Is_Jumping=true;
         }
+
     }
 
 
     public void Player_Move()
     {
-        transform.Translate(player_pos);
-        player_pos = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * bojung * Time.deltaTime;
-        if (Input.GetButtonDown("Vertical")&&Input.GetAxisRaw("Vertical")==1)
-        {
-            player_pos = new Vector2(Input.GetAxisRaw("Horizontal"), 5) * bojung * Time.deltaTime;
+        
+
+        float h = Input.GetAxisRaw("Horizontal");
+        rigid.AddForce(Vector2.right * h, ForceMode2D.Impulse);
+        
+        if (rigid.linearVelocityX > high_speed) 
+        { 
+            rigid.linearVelocityX = high_speed;
         }
-
+        if (rigid.linearVelocityX < high_speed*-1)
+        {
+            rigid.linearVelocityX = high_speed*-1;
+        }
+        if (Input.GetAxisRaw("Horizontal") == 0)
+        {
+            rigid.linearVelocityX = 0;
+        }
     }
 
-    public void Player_Jump()
-    {
-        player_pos = new Vector2(0, 5) * bojung * Time.deltaTime;
-        transform.Translate(player_pos);
-    }
-
+  
     public void Player_Fire()
     {
+        if (Input.GetAxisRaw("Horizontal") != 0)
+        {
+            dir_now = Input.GetAxisRaw("Horizontal");
+        }
         if (Input.GetButton("Jump"))
         {
             holdTimer = holdTimer + Time.deltaTime;
@@ -66,17 +88,25 @@ public class PlayerMove : MonoBehaviour
                 ChargedBullet = true;
 
             }
+            
             Debug.Log(holdTimer);
+            Debug.Log(dir_now);
         }
         if (Input.GetButtonUp("Jump"))
         {
             if (ChargedBullet)
             {
-                Instantiate(ChargedbulletPrefab, spawnpoint.position, Quaternion.identity);
+                GameObject Charged_Bullet = Instantiate(ChargedbulletPrefab, spawnpoint.position, Quaternion.identity);
+
+                Rigidbody2D Cb = Charged_Bullet.GetComponent<Rigidbody2D>();
+                Cb.linearVelocityX = bulletSpeed*dir_now;
             }
             else
             {
-                Instantiate(bulletPrefab, spawnpoint.position, Quaternion.identity);
+                GameObject Bullet = Instantiate(bulletPrefab, spawnpoint.position, Quaternion.identity);
+
+                Rigidbody2D rb = Bullet.GetComponent<Rigidbody2D>();
+                rb.linearVelocityX = bulletSpeed * dir_now;
             }
             holdTimer = 0f;
             ChargedBullet = false;

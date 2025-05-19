@@ -6,13 +6,12 @@ public class Bullet : MonoBehaviour
     public float bulletSpeed;
     public float bulletDamage;
     private Vector2 bullet_pos;
-    private Bullet bullet;
+    private GameObject bullet;
     public PlayerMove player;
 
     private void Start()
     {
-        bullet_pos = new Vector2(bulletSpeed, 0);
-        bullet= GetComponent<Bullet>();
+        bullet= GetComponent<GameObject>();
     }
     private void Update()
     {
