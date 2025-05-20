@@ -12,7 +12,13 @@ public class PlayerMove : MonoBehaviour
     public float ChargeTimeRequired = 0.5f;
     private float dir_now=1;
     public float bulletSpeed;
-
+    private Animator Anim;
+    private bool facingRight;
+    private readonly int playerSpeedID = Animator.StringToHash("PlayerSpeed");
+    private readonly int onGroundID = Animator.StringToHash("OnGround");
+    private readonly int shootingID = Animator.StringToHash("Shoot");
+    private readonly int shootingOnAirID = Animator.StringToHash("ShootOnAir");
+    private readonly int isShootingID = Animator.StringToHash("IsShooting");
     private float holdTimer = 0f;
     private bool ChargedBullet = false;
 
@@ -20,23 +26,27 @@ public class PlayerMove : MonoBehaviour
     {
         
         rigid = GetComponent<Rigidbody2D>();
+        Anim = GetComponent<Animator>();
+        facingRight = true;
 
     }
 
     private void FixedUpdate()
     {
         Player_Move();
-        if (rigid.linearVelocityY < 0.0f)
+        Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0, 0));
+        RaycastHit2D hit = Physics2D.Raycast(rigid.position, Vector3.down, 1, LayerMask.GetMask("Flatform"));
+        if (hit.collider != null)
         {
-            Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0, 0));
-            RaycastHit2D hit = Physics2D.Raycast(rigid.position, Vector3.down, 1, LayerMask.GetMask("Flatform"));
-            if (hit.collider != null)
-            {
-                Debug.Log(hit.collider.name);
-                Is_Jumping = false;
-            }
-
+            Debug.Log(hit.collider.name);
+            Is_Jumping = false;
         }
+        else if (hit.collider == null) 
+        {
+            Is_Jumping = true;
+        }
+
+        
     }
 
     private void Update()
@@ -45,9 +55,13 @@ public class PlayerMove : MonoBehaviour
         if (Input.GetButtonDown("Vertical")&&Is_Jumping==false)
         {
             rigid.AddForce(Vector2.up * Jump_height, ForceMode2D.Impulse);
-            Is_Jumping=true;
         }
 
+        AnimatorStateInfo stateInfo = Anim.GetCurrentAnimatorStateInfo(0);
+        // Always checking if player on Ground or not
+        Anim.SetBool(onGroundID, !Is_Jumping);
+        // Always setting the Player Speed to the Animator - Idle if Horizontal PlayerSpeed < 0.05f
+        Anim.SetFloat(playerSpeedID, Mathf.Abs(rigid.linearVelocity.x));
     }
 
 
@@ -57,7 +71,26 @@ public class PlayerMove : MonoBehaviour
 
         float h = Input.GetAxisRaw("Horizontal");
         rigid.AddForce(Vector2.right * h, ForceMode2D.Impulse);
+        if (Input.GetAxisRaw("Horizontal") != 0)
+        {
+            if (Input.GetAxisRaw("Horizontal") == 1)
+            {
+                if (!facingRight)
+                {
+                    FlipPlayer();
+                }
+            }
+
+            if (Input.GetAxisRaw("Horizontal") == -1)
+            {
+                if (facingRight)
+                {
+                    FlipPlayer();
+                }
+            }
+        }
         
+        //spawnpoint.position = transform.position + new Vector3(0.6f*dir_now, 0, 0);
         if (rigid.linearVelocityX > high_speed) 
         { 
             rigid.linearVelocityX = high_speed;
@@ -75,14 +108,16 @@ public class PlayerMove : MonoBehaviour
   
     public void Player_Fire()
     {
-        if (Input.GetAxisRaw("Horizontal") != 0)
-        {
-            dir_now = Input.GetAxisRaw("Horizontal");
-        }
+       
         if (Input.GetButton("Jump"))
         {
+            
             holdTimer = holdTimer + Time.deltaTime;
-
+            Anim.SetBool(isShootingID, true);
+            if (Is_Jumping)
+            {
+                Anim.SetTrigger(shootingOnAirID);
+            }
             if (holdTimer >= ChargeTimeRequired)
             {
                 ChargedBullet = true;
@@ -90,7 +125,6 @@ public class PlayerMove : MonoBehaviour
             }
             
             Debug.Log(holdTimer);
-            Debug.Log(dir_now);
         }
         if (Input.GetButtonUp("Jump"))
         {
@@ -110,7 +144,14 @@ public class PlayerMove : MonoBehaviour
             }
             holdTimer = 0f;
             ChargedBullet = false;
+            Anim.SetBool(isShootingID, false);
         }
 
+    }
+    private void FlipPlayer()
+    {
+        facingRight = !facingRight; // FacingRight becomes the opposite of the current value.
+        transform.Rotate(0f, 180f, 0f);
+        dir_now = dir_now * -1;
     }
 }
