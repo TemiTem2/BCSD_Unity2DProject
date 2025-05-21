@@ -11,7 +11,6 @@ public class PlayerMove : MonoBehaviour
     public Transform spawnpoint;
     public float ChargeTimeRequired = 0.5f;
     private float dir_now=1;
-    public float bulletSpeed;
     private Animator Anim;
     private bool facingRight;
     private readonly int playerSpeedID = Animator.StringToHash("PlayerSpeed");
@@ -34,19 +33,27 @@ public class PlayerMove : MonoBehaviour
     private void FixedUpdate()
     {
         Player_Move();
-        Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0, 0));
-        RaycastHit2D hit = Physics2D.Raycast(rigid.position, Vector3.down, 1, LayerMask.GetMask("Flatform"));
-        if (hit.collider != null)
-        {
-            Debug.Log(hit.collider.name);
+        //Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0, 0));
+        //RaycastHit2D hit = Physics2D.Raycast(rigid.position, Vector3.down, 1, LayerMask.GetMask("Flatform"));
+        //if (hit.collider != null)
+        //{
+        //    Debug.Log(hit.collider.name);
+        //    Is_Jumping = false;
+        //}
+        //else if (hit.collider == null) 
+        //{
+        //    Is_Jumping = true;
+        //}
+        if (rigid.linearVelocityY == 0f) 
+        { 
             Is_Jumping = false;
         }
-        else if (hit.collider == null) 
+
+        if (rigid.linearVelocityY != 0f)
         {
             Is_Jumping = true;
         }
 
-        
     }
 
     private void Update()
@@ -123,24 +130,18 @@ public class PlayerMove : MonoBehaviour
                 ChargedBullet = true;
 
             }
-            
-            Debug.Log(holdTimer);
         }
         if (Input.GetButtonUp("Jump"))
         {
             if (ChargedBullet)
             {
                 GameObject Charged_Bullet = Instantiate(ChargedbulletPrefab, spawnpoint.position, Quaternion.identity);
-
-                Rigidbody2D Cb = Charged_Bullet.GetComponent<Rigidbody2D>();
-                Cb.linearVelocityX = bulletSpeed*dir_now;
+                Charged_Bullet.GetComponent<Bullets>().Setup(dir_now);
             }
             else
             {
                 GameObject Bullet = Instantiate(bulletPrefab, spawnpoint.position, Quaternion.identity);
-
-                Rigidbody2D rb = Bullet.GetComponent<Rigidbody2D>();
-                rb.linearVelocityX = bulletSpeed * dir_now;
+                Bullet.GetComponent<Bullets>().Setup(dir_now);
             }
             holdTimer = 0f;
             ChargedBullet = false;
