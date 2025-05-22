@@ -183,7 +183,6 @@ MonoBehaviour:
   ChargedbulletPrefab: {fileID: 7141307500127815474, guid: e4709bba7eca1bb4db26a83a76873dfc, type: 3}
   spawnpoint: {fileID: 7232322931184251175}
   ChargeTimeRequired: 0.5
-  bulletSpeed: 20
 --- !u!95 &6738865659592028632
 Animator:
   serializedVersion: 7

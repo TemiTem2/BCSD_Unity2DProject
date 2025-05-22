@@ -15,11 +15,11 @@ public class PlayerMove : MonoBehaviour
     private bool facingRight;
     private readonly int playerSpeedID = Animator.StringToHash("PlayerSpeed");
     private readonly int onGroundID = Animator.StringToHash("OnGround");
-    private readonly int shootingID = Animator.StringToHash("Shoot");
     private readonly int shootingOnAirID = Animator.StringToHash("ShootOnAir");
     private readonly int isShootingID = Animator.StringToHash("IsShooting");
     private float holdTimer = 0f;
     private bool ChargedBullet = false;
+    private int HP;
 
     void Start()
     {
@@ -27,23 +27,12 @@ public class PlayerMove : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         Anim = GetComponent<Animator>();
         facingRight = true;
-
+        HP = PlayerManager.MaxHP;
     }
 
     private void FixedUpdate()
     {
         Player_Move();
-        //Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0, 0));
-        //RaycastHit2D hit = Physics2D.Raycast(rigid.position, Vector3.down, 1, LayerMask.GetMask("Flatform"));
-        //if (hit.collider != null)
-        //{
-        //    Debug.Log(hit.collider.name);
-        //    Is_Jumping = false;
-        //}
-        //else if (hit.collider == null) 
-        //{
-        //    Is_Jumping = true;
-        //}
         if (rigid.linearVelocityY == 0f) 
         { 
             Is_Jumping = false;
@@ -53,7 +42,17 @@ public class PlayerMove : MonoBehaviour
         {
             Is_Jumping = true;
         }
-
+        if (HP != PlayerManager.currentHP) 
+        {
+            
+                HP = PlayerManager.currentHP;
+                Anim.SetTrigger("Hurt");
+                if (HP <=0)
+                {
+                    Destroy(this.gameObject);
+                }
+            
+        }
     }
 
     private void Update()
@@ -69,6 +68,10 @@ public class PlayerMove : MonoBehaviour
         Anim.SetBool(onGroundID, !Is_Jumping);
         // Always setting the Player Speed to the Animator - Idle if Horizontal PlayerSpeed < 0.05f
         Anim.SetFloat(playerSpeedID, Mathf.Abs(rigid.linearVelocity.x));
+        if (PlayerManager.mujukTime > 0) 
+        {
+            Anim.SetTrigger("Inmujuk");
+        }
     }
 
 
@@ -136,12 +139,12 @@ public class PlayerMove : MonoBehaviour
             if (ChargedBullet)
             {
                 GameObject Charged_Bullet = Instantiate(ChargedbulletPrefab, spawnpoint.position, Quaternion.identity);
-                Charged_Bullet.GetComponent<Bullets>().Setup(dir_now);
+                Charged_Bullet.GetComponent<Bullets>().Setup(dir_now, ChargedBullet);
             }
             else
             {
                 GameObject Bullet = Instantiate(bulletPrefab, spawnpoint.position, Quaternion.identity);
-                Bullet.GetComponent<Bullets>().Setup(dir_now);
+                Bullet.GetComponent<Bullets>().Setup(dir_now, ChargedBullet);
             }
             holdTimer = 0f;
             ChargedBullet = false;

@@ -21,10 +21,11 @@ public class Enemy01 : MonoBehaviour
 
     public void Onhit(float dmg)
     {
-        Destroy(this.gameObject);
+        
         if (CurrentHP <= dmg) 
-        { 
-            
+        {
+            Destroy(this.gameObject);
+            ScoreManager.EnemyKills++;
         }
         else
         {

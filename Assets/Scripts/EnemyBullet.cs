@@ -6,6 +6,7 @@ public class EnemyBullet : MonoBehaviour
     public float bulletSpeed;
     public void Setup()
     {
+        
         bullet = GetComponent<Rigidbody2D>();
         bullet.linearVelocityX = bulletSpeed*-1;
     }
@@ -16,7 +17,7 @@ public class EnemyBullet : MonoBehaviour
 
         if (collision.CompareTag("Player"))
         {
-            Debug.Log("HIT");
+            PlayerManager.PlayerAttacked();
         }
         Destroy(gameObject);
     }
