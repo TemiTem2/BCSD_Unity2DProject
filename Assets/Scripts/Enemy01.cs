@@ -7,17 +7,13 @@ public class Enemy01 : MonoBehaviour
     public float CurrentHP;
     public GameObject EnemybulletPrefab;
     public Transform spawnpoint;
+    public float AttackTime = 2.0f;
     void Start()
     {
         CurrentHP = EnemyHP;
         StartCoroutine("Fire");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void Onhit(float dmg)
     {
@@ -36,9 +32,13 @@ public class Enemy01 : MonoBehaviour
     {
         while (true)
         {
+            if (GameManager.isPaused)
+            {
+                yield return null;
+            }
             GameObject clone = Instantiate(EnemybulletPrefab, spawnpoint.position, Quaternion.identity);
             clone.GetComponent<EnemyBullet>().Setup();
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(AttackTime);
         }
     }
 }

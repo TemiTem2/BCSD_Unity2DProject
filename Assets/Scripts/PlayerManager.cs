@@ -8,7 +8,8 @@ public class PlayerManager : MonoBehaviour
     public static bool IsGameOver;
     public static float mujukTime;
     
-    
+
+
     void Awake()
     {
         currentHP = MaxHP;
@@ -19,6 +20,15 @@ public class PlayerManager : MonoBehaviour
         if (mujukTime > 0f)
         {
             mujukTime = mujukTime - Time.deltaTime;
+        }
+        if (IsGameOver)
+        {
+            currentHP = 0;
+            Destroy(player);
+        }
+        if (player != null && player.transform.position.y <= -10f)
+        {
+            IsGameOver = true;
         }
     }
 

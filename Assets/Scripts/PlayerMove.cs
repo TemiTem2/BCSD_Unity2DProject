@@ -32,6 +32,10 @@ public class PlayerMove : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GameManager.isPaused)
+        {
+            return;
+        }
         Player_Move();
         if (rigid.linearVelocityY == 0f) 
         { 
@@ -57,6 +61,10 @@ public class PlayerMove : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.isPaused)
+        {
+            return;
+        }
         Player_Fire();
         if (Input.GetButtonDown("Vertical")&&Is_Jumping==false)
         {

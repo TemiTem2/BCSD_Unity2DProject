@@ -3,15 +3,33 @@ using UnityEngine;
 public class ScoreManager : MonoBehaviour
 {
     static public int EnemyKills = 0;
-    static public int CoinTaking = 0;
-    private int score;
+    public static int CoinCount=0;
+    public static int TimeScore = 0;
+    public static int totalscore = 0;
+    public static int HighScore = 0;
+    private float timer;
+    public static bool IsHighScore = false;
 
     private void Awake()
     {
-        score = 0;
+        totalscore = 0;
+        timer = 0;
     }
     private void Update()
     {
-        score = EnemyKills * 100 + CoinTaking * 100;
+        timer += Time.deltaTime;
+        if (timer >= 1f&&PlayerManager.IsGameOver==false)
+        {
+            TimeScore++;
+            timer = 0;
+        }
+
+
+        totalscore = EnemyKills * 100 + CoinCount * 100 + TimeScore *10;
+        if (totalscore > HighScore)
+        {
+            HighScore = totalscore;
+            IsHighScore = true;
+        }
     }
 }
