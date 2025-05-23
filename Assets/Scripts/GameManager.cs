@@ -39,6 +39,13 @@ public class GameManager : MonoBehaviour
         pausemenu.SetActive(true);
         isPaused = true;
     }
+
+    public void MainMenuButton()
+    {
+        pausemenu.SetActive(false);
+        isPaused = false;
+        PlayerManager.IsGameOver = true;
+    }
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
