@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public GameObject pausemenu;
@@ -38,5 +38,25 @@ public class GameManager : MonoBehaviour
     {
         pausemenu.SetActive(true);
         isPaused = true;
+    }
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        PlayerManager.IsGameOver = false;
+        ScoreManager.EnemyKills = 0;
+        ScoreManager.CoinCount = 0;
+        ScoreManager.TimeScore = 0;
+        ScoreManager.totalscore = 0;
+        ScoreManager.IsHighScore = false;
+    }
+    public void Menu()
+    {
+        PlayerManager.IsGameOver = false;
+        ScoreManager.EnemyKills = 0;
+        ScoreManager.CoinCount = 0;
+        ScoreManager.TimeScore = 0;
+        ScoreManager.totalscore = 0;
+        ScoreManager.IsHighScore = false;
+        SceneManager.LoadScene("Menu");
     }
 }
