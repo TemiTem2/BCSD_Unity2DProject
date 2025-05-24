@@ -34,7 +34,8 @@ public class EnemyBullet : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             PlayerManager.PlayerAttacked();
+            Destroy(gameObject);
         }
-        Destroy(gameObject);
+        
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 public class The_Wall : MonoBehaviour
 {
     private float Speed;
+    public float beasu;
     void Start()
     {
         Speed = 0;
@@ -16,7 +17,7 @@ public class The_Wall : MonoBehaviour
         {
             return;
         }
-        Speed = Speed + Time.deltaTime*0.001f;
+        Speed = Speed + Time.deltaTime*beasu;
         if (PlayerManager.IsGameOver)
         {
             Speed = 1;

@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
@@ -12,7 +13,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetButtonDown("Cancel"))
         {
-            if (isPaused)
+            if (isPaused||PlayerManager.IsGameOver==true)
             {
                 Resume();
             }
@@ -64,6 +65,10 @@ public class GameManager : MonoBehaviour
         ScoreManager.TimeScore = 0;
         ScoreManager.totalscore = 0;
         ScoreManager.IsHighScore = false;
+        if (SceneManager.GetActiveScene().name == "Testing")
+        {
+            ScoreManager.HighScore = 0;
+        }
         SceneManager.LoadScene("Menu");
     }
 }

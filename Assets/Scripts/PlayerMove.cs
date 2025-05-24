@@ -34,6 +34,8 @@ public class PlayerMove : MonoBehaviour
     {
         if (GameManager.isPaused)
         {
+            rigid.linearVelocityX = 0;
+            rigid.linearVelocityY = 0;
             return;
         }
         Player_Move();
