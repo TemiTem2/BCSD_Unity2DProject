@@ -124,7 +124,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3b3ebff49d3fe942a8d4573b7488c86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coinSound: {fileID: 8300000, guid: 9fd73d4b4e6c46149bca82ed5e1f4cea, type: 3}
 --- !u!61 &8470965849300046441
 BoxCollider2D:
   m_ObjectHideFlags: 0
